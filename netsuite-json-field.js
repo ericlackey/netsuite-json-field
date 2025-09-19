@@ -63,14 +63,15 @@ async function loadEditor() {
     };
 
     window.editor = new JSONEditor(container, options);
-        try {
-            const jsonObject = await getFieldValueInJsonFormat(editorOptions.netsuiteFieldId);
-            console.log(jsonObject);
-            editor.set(jsonObject);
-        } catch(e) {
-            console.log(e)
-            editor.set({});
-        }
-    };
+
+    try {
+        const jsonObject = await getFieldValueInJsonFormat(editorOptions.netsuiteFieldId);
+        console.log(jsonObject);
+        editor.set(jsonObject);
+    } catch(e) {
+        console.log(e)
+        editor.set({});
+    }
+
 
 }
