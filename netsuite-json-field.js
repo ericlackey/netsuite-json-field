@@ -1,6 +1,6 @@
 
 
-function getFieldValueInJsonFormat(fieldId) {
+async function getFieldValueInJsonFormat(fieldId) {
 
     require(['N/currentRecord'], (currentRecord) => {
     
@@ -25,7 +25,7 @@ function getFieldValueInJsonFormat(fieldId) {
 
 }
 
-function setOriginalFieldValue(val) {
+async function setOriginalFieldValue(val) {
 
     console.log(val)
 
@@ -46,27 +46,31 @@ function setOriginalFieldValue(val) {
 
 }
 
-function loadEditor() {
-
-    require(['N/currentRecord',"N"], (currentRecord) => {
+async function isReadOnly() {
+    require(['N/currentRecord'], (currentRecord) => {
         var thisRecord = currentRecord.get();
+        return thisRecord.isReadOnly;
+    });
+}
 
-        var container = document.getElementById("jsoneditor");
-        var options = {
-            mode: thisRecord.isReadOnly ? "view" : "tree",
-            onChange: () => setOriginalFieldValue(val)
-        };
+async function loadEditor() {
 
-        window.editor = new JSONEditor(container, options);
+    var isReadOnly = await isReadOnly();
+    var container = document.getElementById("jsoneditor");
+    var options = {
+        mode: isReadOnly ? "view" : "tree",
+        onChange: () => setOriginalFieldValue(val)
+    };
 
+    window.editor = new JSONEditor(container, options);
         try {
-            const jsonObject = getFieldValueInJsonFormat(editorOptions.netsuiteFieldId);
+            const jsonObject = await getFieldValueInJsonFormat(editorOptions.netsuiteFieldId);
             console.log(jsonObject);
             editor.set(jsonObject);
         } catch(e) {
             console.log(e)
             editor.set({});
         }
-    });
+    };
 
 }
