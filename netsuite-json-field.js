@@ -10,6 +10,7 @@ function getFieldValueInJsonFormat(fieldId) {
 
         // If we are in view only mode the field value might not be accessible due to NS quirk
         if (thisRecord.isReadOnly && !rawJson) {
+            console.log(`div[data-field-name="${fieldId}"] span[data-nsps-type="field_input"]`)
             rawJson = document.querySelector(
                 `div[data-field-name="${fieldId}"] span[data-nsps-type="field_input"]`
             )?.innerText;
