@@ -16,6 +16,9 @@ function getFieldValueInJsonFormat(fieldId) {
             )?.innerText;
         }
 
+        console.log(rawJson);
+
+        
         return JSON.parse(rawJson);
         
     });
