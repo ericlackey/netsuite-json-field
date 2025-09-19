@@ -7,9 +7,15 @@ function loadEditor() {
     require(['N/currentRecord',"N"], (currentRecord, netsuite) => {
         console.log(netsuite);
         var thisRecord = currentRecord.get();
-        console.log(JSON.stringify(thisRecord));
-        console.log(thisRecord.getField(editorOptions.netsuiteFieldId));
-        console.log(thisRecord.getValue(editorOptions.netsuiteFieldId));
+        var recordId = thisRecord.id;
+        var thisField = thisRecord.getField({fieldId: editorOptions.netsuiteFieldId})
+
+        console.log(JSON.stringify(thisField));
+
+        if (!recordId) {
+            recordState = "create";
+        }
+
         var container = document.getElementById("jsoneditor");
         var options = {
             mode: thisRecord.isReadOnly ? "view" : "tree",
@@ -25,13 +31,14 @@ function loadEditor() {
                 }
             }
         };
+
         window.editor = new JSONEditor(container, options);
         console.log('are we still going?')
         console.log(editorOptions.netsuiteFieldId)
         try {
-            console.log(thisRecord.getValue({fieldId: editorOptions.netsuiteFieldId}));
+            console.log(thisRecord.getText({fieldId: editorOptions.netsuiteFieldId}));
 
-            var rawJson;
+            var rawJson = {};
 
             if (thisRecord.isReadOnly) {
                 rawJson = document.querySelector(
