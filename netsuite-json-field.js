@@ -36,9 +36,10 @@ function loadEditor() {
 
 
 
+
             //const rawJson = JSON.parse(thisRecord.getValue({fieldId: editorOptions.netsuiteFieldId}));
             console.log(rawJson);
-            editor.set(rawJson);
+            editor.set(JSON.parse(rawJson));
         } catch(e) {
             console.log(e)
             editor.set({});
