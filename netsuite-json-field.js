@@ -30,13 +30,16 @@ function loadEditor() {
         console.log(editorOptions.netsuiteFieldId)
         try {
             console.log(thisRecord.getValue({fieldId: editorOptions.netsuiteFieldId}));
-            const rawJson = document.querySelector(
-            'div[data-field-name="custrecord_field_with_json_data"] span[data-nsps-type="field_input"]'
-            )?.innerText;
 
+            var rawJson;
 
-
-
+            if (thisRecord.isReadOnly) {
+                rawJson = document.querySelector(
+                'div[data-field-name="custrecord_field_with_json_data"] span[data-nsps-type="field_input"]'
+                )?.innerText;
+            } else {
+                rawJson = thisRecord.getValue({fieldId: editorOptions.netsuiteFieldId})
+            }
             //const rawJson = JSON.parse(thisRecord.getValue({fieldId: editorOptions.netsuiteFieldId}));
             console.log(rawJson);
             editor.set(JSON.parse(rawJson));
