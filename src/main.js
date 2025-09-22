@@ -1,6 +1,8 @@
-function loadEditor() {
+import { createJSONEditor } from 'vanilla-jsoneditor'
 
-    require(['N/currentRecord'], (currentRecord) => {
+export function loadEditor() {
+
+     require(['N/currentRecord'], (currentRecord) => {
 
         const thisRecord = currentRecord.get();
 
@@ -18,7 +20,7 @@ function loadEditor() {
 
             console.log(rawJson);
             
-            return JSON.parse(rawJson);
+            return {"json": JSON.parse(rawJson)};
             
         };
 
@@ -27,11 +29,11 @@ function loadEditor() {
             console.log("changing field")
 
             try {
-                const updatedJson = window.editor.get();
+                const updatedJson = editor.get();
                 console.log(updatedJson)
                 thisRecord.setValue({
                     fieldId: editorOptions.netsuiteFieldId,
-                    value: JSON.stringify(updatedJson)
+                    value: JSON.stringify(updatedJson.json)
                 });
             } catch (err) {
                 console.error("Invalid JSON", err);
@@ -40,12 +42,23 @@ function loadEditor() {
         };
 
 
-        var container = document.getElementById("jsoneditor");
-        var options = {
-            mode: thisRecord.isReadOnly ? "view" : "tree",
-            onChange: () => setOriginalFieldValue()
-        };
 
+        const container = document.getElementById('jsoneditor')
+
+        const jsonObject = getFieldValueInJsonFormat(editorOptions.netsuiteFieldId);
+        
+          var editor = createJSONEditor({
+            target: container,
+            props: {
+                content: jsonObject,
+                mode: "tree",
+                readOnly: thisRecord.isReadOnly ? true : false,
+                 onChange: () => setOriginalFieldValue(),
+                mainMenuBar: false
+            }
+        });
+
+        /*
         window.editor = new JSONEditor(container, options);
 
         try {
@@ -55,7 +68,7 @@ function loadEditor() {
         } catch(e) {
             console.log(e)
             editor.set({});
-        }
+        }*/
 
 
     });
